@@ -29,25 +29,7 @@ $(document).ready(function () {
         });
     });
 
-    // ### Сохранение введеных данных в LocaleStorage ###
-    if (window.localStorage) {
-        // Берем массив всех элементов, с атрибутом name
-        let elements = document.querySelectorAll("[name]");
-        // Проходимся по массиву
-        for (var i = 0, length = elements.length; i < length; i++) {
-            // На каждой итерации вызываем функцию
-            (function (element) {
-                // Берем атрибут name для текущего элемента
-                let name = element.getAttribute("name");
-                // Получаем данные из LocaleStorage и вписываем их в элемент
-                element.value = localStorage.getItem(name) || "";
-                // По событию onkeyup сохраняем данные элемента в LocaleStorage
-                element.onkeyup = function () {
-                    localStorage.setItem(name, element.value);
-                };
-            })(elements[i]);
-        }
-    }
+    
 
     // ### Модальное окно с формой ###
     // Отображение модального окна с формой
@@ -93,7 +75,7 @@ $(document).ready(function () {
             let timeFraction = (time - start) / duration;
             // Если время анимации превысило 1, ставим = 1
             if (timeFraction > 1) timeFraction = 1;
-            
+
             let progress = timing(timeFraction)
             // Запускаем отрисовку
             draw(progress);

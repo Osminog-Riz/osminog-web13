@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/*$(document).ready(function () {
 
     // Функция анимации и блокировки кнопки при нажатии
     let show = function(btn) {
@@ -91,4 +91,4 @@ $(document).ready(function () {
             }
         };
     }
-});
+});*/
