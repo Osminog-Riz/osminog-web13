@@ -1,0 +1,17 @@
+.body{
+    background-color: aliceblue;
+    height: 100%;
+    width: 100%;
+}
+.form1{
+    background-color: lightgray;
+    height:400px;
+    width:300px;
+    margin:auto;
+    box-shadow: 2px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.contacts1{
+    padding: 40px;
+    margin:auto;
+}
