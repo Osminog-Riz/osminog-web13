@@ -1,5 +1,5 @@
 class Form extends React.Component {
-    
+
     // Конструктор
     constructor(props) {
 
@@ -13,7 +13,7 @@ class Form extends React.Component {
         var mail = localStorage.getItem("mail") || "";
         // Берем значение комментария из LocalStorage
         var comment =  localStorage.getItem("comment") || "";
-        
+
         // Стартовые присвоения состояний
         this.state = {
             // Имя
@@ -34,9 +34,8 @@ class Form extends React.Component {
         this.resetForm = this.resetForm.bind(this);
         this.show = this.show.bind(this);
         this.hide = this.hide.bind(this);
-        
     }
-    
+
     // Метод блокировки и анимации кнопки при нажатии
     show(btn) {
         // Блокируем кнопку
@@ -88,7 +87,7 @@ class Form extends React.Component {
         // Записываем в LocalStorage
         localStorage.setItem("mail", event.target.value);
     }
-    
+
     // Обработчик на изменение комментария
     handleChangeComment(event) {
         // Берем значение поля комментария
@@ -127,25 +126,24 @@ class Form extends React.Component {
         e.preventDefault();
         // Проверка валидности имени
         if (this.state.nameValid === true) {
-            
             // Включаем блокировку и анимацию кнопки
             this.show(document.getElementById("modal-myform-sumbit"));
             // Отправляем форму на сервер
-            fetch('https://formcarry.com/s/AFY3jk7Zmzm', {
+            fetch("https://formcarry.com/s/AFY3jk7Zmzm", {
                 // Метод
                 method: "POST",
                 // Данные формы
                 body: JSON.stringify(this.state),
                 // Заголовки
                 headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
                 },
             }).then(
                 (response) => (response.json())
             ).then((response) => {
                 // Если успешно
-                if (response.status === 'success') {
+                if (response.status === "success") {
                     // Выводим сообщение об отправке
                     alert("Сообщение отправлено!");
                     // Убираем анимацию и блокировку кнопки
@@ -153,7 +151,7 @@ class Form extends React.Component {
                     // Очищаем и закрываем форму
                     this.resetForm();
                 // Если ошибка
-                } else if (response.status === 'fail') {
+                } else if (response.status === "fail") {
                     // Выводим сообщение об ошибке
                     alert("Ошибка отправки! Пожалуйста, повторите попытку.")
                     // Отключаем анимацию и блокировку кнопки
