@@ -1,92 +1,142 @@
 class Form extends React.Component {
-    //создаем экземпляр класса Form
+    
+    // Конструктор
     constructor(props) {
 
+        // Вызываем конктруктор родителя
         super(props);
-        //берем значение имени из нижнего рендера
+        // Берем значение имени из LocalStorage
         var name = localStorage.getItem("name") || "";
-        //проверяем валидность
+        // Проверяем валидность
         var nameIsValid = this.validateName(name);
-        //берем значения для мыла из нижнего рендера
+        // Берем значение Email из LocalStorage
         var mail = localStorage.getItem("mail") || "";
+        // Берем значение комментария из LocalStorage
         var comment =  localStorage.getItem("comment") || "";
-        //стартовые присвоения состояний (пер-ых, которые меняются в процессе ввода)
-
+        
+        // Стартовые присвоения состояний
         this.state = {
-            name: name, // здесь имя
+            // Имя
+            name: name,
+            // Почта
             mail: mail,
+            // Комментарий
             comment: comment,
-            nameValid: nameIsValid //булевская штука для проверки валидности введенного имени
+            // Валидность имени
+            nameValid: nameIsValid
         }
 
-        //биндинг функций
+        // Биндинг всех методов
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeMail = this.handleChangeMail.bind(this);
         this.handleChangeComment = this.handleChangeComment.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.resetForm = this.resetForm.bind(this);
+        this.show = this.show.bind(this);
+        this.hide = this.hide.bind(this);
         
     }
+    
+    // Метод блокировки и анимации кнопки при нажатии
+    show(btn) {
+        // Блокируем кнопку
+        btn.disabled = true;
+        // Добавляем анимированный div загрузки, вместо текста
+        btn.innerHTML = "<div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div>";
+    }
 
-    // Проверка длины имени
+    // Метод отмены блокировки и анимации кнопки при нажатии
+    hide(btn) {
+        // Возвращаем текст на место иконки загрузки
+        btn.innerHTML = "SEND";
+        // Снимаем блокировку кнопки
+        btn.disabled = false;
+    }
+
+    // Метод проверки длины имени
     validateName(name) {
         return name.length > 1;
     }
 
     // Обработчик на изменение имени
     handleChangeName(event) {
-        var val = event.target.value;
+        // Берем значение инпута имени
+        let val = event.target.value;
+        // Выводим в консоль введенные символы
         console.log("Имя: " + val);
+        // Проверяем валидность имени
         var valid = this.validateName(val);
-        //меняем состояние переменной value
+        // Меняем состояние
         this.setState({
             name: event.target.value,
             nameValid: valid
         });
+        // Записываем в LocalStorage
         localStorage.setItem("name", event.target.value);
     }
 
+    // Обработчик на изменение почты
     handleChangeMail(event) {
+        // Берем значение инпута почты
         var val = event.target.value;
+        // Выводим в консоль введенные символы
         console.log("Mail: " + val);
+        // Меняем состояние
         this.setState({
             mail: event.target.value
         });
+        // Записываем в LocalStorage
         localStorage.setItem("mail", event.target.value);
     }
     
+    // Обработчик на изменение комментария
     handleChangeComment(event) {
+        // Берем значение поля комментария
         var val = event.target.value;
+        // Выводим в консоль введенные символы
         console.log("Comment: " + val);
+        // Меняем состояние
         this.setState({
             comment: event.target.value
         });
+        // Записываем в LocalStorage
         localStorage.setItem("comment", event.target.value);
     }
 
-    // @TODO Reset inputs value
+    // Метод очистки LocalStorage
     resetForm() {
+        // Меняем поля на пустые строки
         localStorage.setItem("name", "");
         localStorage.setItem("mail", "");
         localStorage.setItem("comment", "");
+        // Меняем состояние
         this.setState({
             name: "",
             mail: "",
             comment: "",
         });
+        // Очищаем инпуты и поля
         $(".name1").value = "";
+        // Закрываем форму с помощью кнопки назад
+        history.back();
     }
 
-    // При клике на кнопку отправить
+    // Обработчик нажатия кнопки назад
     handleSubmit(e) {
         // Запрет обновления страницы
         e.preventDefault();
-
+        // Проверка валидности имени
         if (this.state.nameValid === true) {
-
+            
+            // Включаем блокировку и анимацию кнопки
+            this.show(document.getElementById("modal-myform-sumbit"));
+            // Отправляем форму на сервер
             fetch('https://formcarry.com/s/AFY3jk7Zmzm', {
+                // Метод
                 method: "POST",
+                // Данные формы
                 body: JSON.stringify(this.state),
+                // Заголовки
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -94,22 +144,29 @@ class Form extends React.Component {
             }).then(
                 (response) => (response.json())
             ).then((response) => {
+                // Если успешно
                 if (response.status === 'success') {
-                    alert("Message Sent.");
-                    this.resetForm()
+                    // Выводим сообщение об отправке
+                    alert("Сообщение отправлено!");
+                    // Убираем анимацию и блокировку кнопки
+                    this.hide(document.getElementById("modal-myform-sumbit"));
+                    // Очищаем и закрываем форму
+                    this.resetForm();
+                // Если ошибка
                 } else if (response.status === 'fail') {
-                    alert("Message failed to send.")
+                    // Выводим сообщение об ошибке
+                    alert("Ошибка отправки! Пожалуйста, повторите попытку.")
+                    // Отключаем анимацию и блокировку кнопки
+                    this.hide(document.getElementById("modal-myform-sumbit"));
                 }
             })
         } else {
-            alert("Ошибка ввода");
+            alert("Ошибка ввода! Проверьте корректность введеного имени.");
         }
     }
 
+    // Рендер формы
     render() {
-
-        var nameColor = this.state.nameValid === true ? "green" : "red";
-
         return (
             <div className="forma container">
                 <div className="form_content">
