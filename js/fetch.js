@@ -1,4 +1,4 @@
-/*$(document).ready(function () {
+$(document).ready(function () {
 
     // Функция анимации и блокировки кнопки при нажатии
     let show = function(btn) {
@@ -23,7 +23,6 @@
     // id кнопки отправки нужной формы
     // Вызываем AJAX функцию с нашими параметрами формы
     fetchForm("myform", "myform-sumbit");
-    fetchForm("modal-myform", "modal-myform-sumbit");
 
     // Сама функция, которую мы вызываем
     function fetchForm(formID, buttonID) {
@@ -91,4 +90,4 @@
             }
         };
     }
-});*/
+});
